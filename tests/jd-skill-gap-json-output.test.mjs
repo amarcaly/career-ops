@@ -35,7 +35,14 @@ try {
   );
 
   const runJson = (fixture) => {
-    const out = run(NODE, [join(ROOT, 'jd-skill-gap.mjs'), fixture], { cwd: dir });
+    // cv.md is a User Layer file resolved via getCareerOpsRoot() (env vars >
+    // .career-ops-data marker > codebase root), not via plain process.cwd()
+    // — point it at the fixture dir the same way every other data-root-aware
+    // test does.
+    const out = run(NODE, [join(ROOT, 'jd-skill-gap.mjs'), fixture], {
+      cwd: dir,
+      env: { ...process.env, CAREER_OPS_ROOT: dir, CAREER_OPS_DATA_DIR: '' },
+    });
     if (out === null) return null;
     try {
       return JSON.parse(out);
