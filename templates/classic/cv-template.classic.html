@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<!-- career-ops-template
+name: Classic
+version: 1.0.0
+-->
+<html lang="{{LANG}}">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{NAME}} — CV</title>
+<style>
+  /* ── Classic ──────────────────────────────────────────────────────────────
+     A plain, traditional resume format: no horizontal rules under section
+     headers, no color, no Professional Summary or Core Competencies section
+     (deliberately absent from this template's markup — see the "Sections
+     omitted on purpose" note below). Modeled on a hand-written Word-style
+     resume: centered header, bold-uppercase section labels with no border,
+     single-line job headers ("Company, Role, Location (Dates)"), and
+     hyphen-prefixed bullet lines throughout instead of disc markers.
+
+     Sections omitted on purpose: this template has no Professional Summary
+     or Core Competencies block at all — not even an empty one. Those two
+     substitution keys are simply absent from this file, so a payload's
+     `summary`/`competencies` fields are silently ignored no matter what they
+     contain. This is intentional for this template's minimalist design, not
+     a bug; use a different template (ats, modern, jake, ...) for a CV that
+     should show either section. */
+
+  :root {
+    --font-family: "Liberation Serif", "Times New Roman", Georgia, "DejaVu Serif", serif;
+    --font-size: 11px;
+    --page-margin: 0.7in;
+  }
+  @page { margin: var(--page-margin); }
+
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-variant-ligatures: none;
+    font-feature-settings: "liga" 0, "clig" 0, "dlig" 0;
+  }
+
+  html {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  body {
+    font-family: var(--font-family);
+    font-size: var(--font-size);
+    line-height: 1.4;
+    color: #000000;
+    background: #ffffff;
+    font-variant-ligatures: none;
+    font-feature-settings: "liga" 0, "clig" 0, "dlig" 0;
+  }
+
+  .page {
+    width: 100%;
+    max-width: {{PAGE_WIDTH}};
+    margin: 0 auto;
+  }
+
+  /* === HEADER === */
+  .header {
+    text-align: center;
+    margin-bottom: 14px;
+  }
+
+  .header h1 {
+    font-size: 15px;
+    font-weight: 700;
+    line-height: 1.2;
+    margin-bottom: 3px;
+  }
+
+  .contact-row {
+    font-size: 10.5px;
+    line-height: 1.4;
+  }
+
+  .contact-row a {
+    color: #000000;
+    text-decoration: none;
+  }
+
+  /* The shared contact-row builder always joins items with a literal "|"
+     (see build-cv-html.mjs's buildContactRow) — kept, but styled quiet
+     rather than removed, since no per-template separator override exists. */
+  .separator {
+    color: #999999;
+    margin: 0 8px;
+  }
+
+  /* === SECTIONS ===
+     Bold uppercase label, no border, no small-caps — plain and quiet. */
+  .section { margin-bottom: 11px; }
+
+  .section-title {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    margin-bottom: 4px;
+  }
+
+  /* === WORK EXPERIENCE ===
+     Single-line header: "Company, Role, Location (Dates)" — company bold,
+     everything else plain, all one line. No two-row layout, no float. */
+  .job { margin-bottom: 9px; }
+  .job:last-child { margin-bottom: 0; }
+
+  .job-header {
+    margin-bottom: 2px;
+  }
+
+  .job-company {
+    font-weight: 700;
+  }
+
+  .job ul {
+    list-style: none;
+    padding-left: 14px;
+    margin-top: 2px;
+  }
+
+  .job li {
+    margin-bottom: 2px;
+  }
+
+  .job li::before {
+    content: "-  ";
+  }
+
+  /* === PROJECTS (no partial — falls back to the built-in default builder) === */
+  .project { margin-bottom: 6px; }
+
+  .project-title { font-weight: 700; }
+
+  .project-badge {
+    font-size: 10px;
+    font-style: italic;
+    margin-left: 5px;
+  }
+
+  .project-desc { margin-top: 1px; }
+
+  .project-tech {
+    font-size: 10px;
+    font-style: italic;
+    margin-top: 1px;
+  }
+
+  /* === EDUCATION ===
+     Institution line, then "Degree, Year" on the next line, then an optional
+     description (e.g. GPA) below — three plain stacked lines, no columns. */
+  .edu-item { margin-bottom: 6px; }
+  .edu-item:last-child { margin-bottom: 0; }
+
+  .edu-org { font-weight: 400; }
+
+  .edu-title { margin-top: 1px; }
+
+  .edu-desc { margin-top: 1px; }
+
+  /* === CERTIFICATIONS (no partial — falls back to the built-in default) === */
+  .cert-item { margin-bottom: 3px; }
+  .cert-item::before { content: "-  "; }
+  .cert-title { font-weight: 400; }
+  .cert-org { margin-left: 6px; }
+  .cert-year { margin-left: 6px; }
+
+  /* === AWARDS / HONORS ===
+     One hyphen-prefixed line per award, combining title/org/year with no
+     bold and no columns — matches how a plain-text resume writes an honor
+     as a single sentence rather than a title/issuer/year table row. */
+  .award-item { margin-bottom: 2px; }
+  .award-item::before { content: "-  "; }
+
+  /* === SKILLS / QUALIFICATIONS (no partial — falls back to the built-in
+     default builder, styled here to drop the bold category label the other
+     templates use). === */
+  .skill-item { margin-bottom: 2px; }
+  .skill-item::before { content: "-  "; }
+  .skill-category { font-weight: 400; }
+
+  /* === PAGE BREAK CONTROL === */
+  .header,
+  .edu-item,
+  .cert-item,
+  .award-item,
+  .skill-item,
+  .job {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  .section-title,
+  .job-company,
+  .project-title {
+    break-after: avoid;
+    page-break-after: avoid;
+  }
+
+  .project-tech {
+    break-before: avoid;
+    page-break-before: avoid;
+  }
+
+  /* === RTL (Arabic) support === */
+  html[lang="ar"] body {
+    direction: rtl;
+    text-align: right;
+    font-family: 'Segoe UI', Tahoma, Arial, sans-serif;
+  }
+  html[lang="ar"] .job ul { padding-right: 14px; padding-left: 0; }
+
+  /* === CJK fallback === */
+  html[lang="ja"] body {
+    font-family: "Liberation Serif", 'Times New Roman', 'Hiragino Mincho ProN',
+      'Yu Mincho', 'Noto Serif CJK JP', 'MS PMincho', serif;
+  }
+  html[lang="zh-CN"] body,
+  html[lang="zh"] body {
+    font-family: "Liberation Serif", 'Times New Roman', 'Songti SC',
+      'SimSun', 'Noto Serif CJK SC', serif;
+    line-break: strict;
+    word-break: normal;
+    overflow-wrap: break-word;
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- HEADER -->
+  <div class="header">
+    <h1>{{NAME}}</h1>
+    <div class="contact-row">
+      <a href="tel:{{PHONE}}">{{PHONE}}</a>
+      <span class="separator">|</span>
+      <a href="mailto:{{EMAIL}}">{{EMAIL}}</a>
+      <span class="separator">|</span>
+      <a href="{{LINKEDIN_URL}}">{{LINKEDIN_DISPLAY}}</a>
+      <span class="separator">|</span>
+      <a href="{{PORTFOLIO_URL}}">{{PORTFOLIO_DISPLAY}}</a>
+      <span class="separator">|</span>
+      <span>{{LOCATION}}</span>
+    </div>
+  </div>
+
+  <!-- EDUCATION -->
+  <div class="section">
+    <div class="section-title">{{SECTION_EDUCATION}}</div>
+    {{EDUCATION}}
+  </div>
+
+  <!-- WORK EXPERIENCE -->
+  <div class="section">
+    <div class="section-title">{{SECTION_EXPERIENCE}}</div>
+    {{EXPERIENCE}}
+  </div>
+
+  <!-- PROJECTS -->
+  <div class="section">
+    <div class="section-title">{{SECTION_PROJECTS}}</div>
+    {{PROJECTS}}
+  </div>
+
+  <!-- CERTIFICATIONS -->
+  <div class="section">
+    <div class="section-title">{{SECTION_CERTIFICATIONS}}</div>
+    {{CERTIFICATIONS}}
+  </div>
+
+  <!-- SKILLS -->
+  <div class="section">
+    <div class="section-title">{{SECTION_SKILLS}}</div>
+    {{SKILLS}}
+  </div>
+
+  <!-- AWARDS -->
+  <div class="section">
+    <div class="section-title">{{SECTION_AWARDS}}</div>
+    {{AWARDS}}
+  </div>
+
+  <!-- INTERESTS -->
+  <div class="section">
+    <div class="section-title">{{SECTION_INTERESTS}}</div>
+    <div class="interests-text">{{INTERESTS}}</div>
+  </div>
+
+  <!-- END -->
+
+</div>
+</body>
+</html>

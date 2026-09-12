@@ -1,0 +1,23 @@
+<!--
+  education.html — Classic-pack section partial for Education.
+
+  Institution on its own line, then "Degree, Year" on the next line, then an
+  optional description (e.g. GPA) below — three plain stacked lines, no
+  title/year columns.
+
+  Field placeholders filled per entry:
+    ORG        — institution name
+    TITLE      — degree / course title
+    YEAR       — graduation / completion year (empty string when absent)
+    DESC_BLOCK — conditional: description div when description is present; omitted otherwise
+
+  Template packs: edit tag names, class names, and field order freely inside the ENTRY zone.
+-->
+<!--ENTRY-->
+<div class="edu-item">
+  <div class="edu-org">{{ORG}}</div>
+  <div class="edu-title">{{TITLE}}, {{YEAR}}</div>
+  {{DESC_BLOCK}}
+</div>
+<!--DESC_BLOCK--><div class="edu-desc">{{DESC}}</div><!--/DESC_BLOCK-->
+<!--/ENTRY-->

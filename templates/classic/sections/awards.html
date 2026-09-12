@@ -1,0 +1,20 @@
+<!--
+  awards.html — Classic-pack section partial for Awards & Honors.
+
+  One hyphen-prefixed line per award (see .award-item::before in the main
+  template), combining title/org/year in a single sentence rather than a
+  title/issuer/year table row — matches a plain hand-written resume where an
+  honor reads as one line of prose.
+
+  Field placeholders filled per entry:
+    TITLE      — award name / full sentence
+    ORG_BLOCK  — conditional: ", {{ORG}}" when org is present; omitted otherwise
+    YEAR_BLOCK — conditional: ", {{YEAR}}" when year is present; omitted otherwise
+
+  Template packs: edit tag names, class names, and field order freely inside the ENTRY zone.
+-->
+<!--ENTRY-->
+<div class="award-item">{{TITLE}}{{ORG_BLOCK}}{{YEAR_BLOCK}}</div>
+<!--ORG_BLOCK-->, {{ORG}}<!--/ORG_BLOCK-->
+<!--YEAR_BLOCK-->, {{YEAR}}<!--/YEAR_BLOCK-->
+<!--/ENTRY-->

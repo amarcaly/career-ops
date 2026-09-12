@@ -1,0 +1,25 @@
+<!--
+  experience.html — Classic-pack section partial for Work Experience.
+
+  Single-line job header ("Company, Role, Location (Dates)"), matching a
+  plain hand-written resume rather than the two-row layout the other
+  templates use.
+
+  Field placeholders filled per entry:
+    COMPANY          — employer name (bold)
+    ROLE             — job title
+    PERIOD           — date range
+    BULLETS          — rendered <li> tags
+    LOCATION_BLOCK   — conditional: ", {{LOCATION}}" when location present; omitted when absent
+
+  Template packs: edit tag names, class names, and field order freely inside the ENTRY zone.
+-->
+<!--ENTRY-->
+<div class="job">
+  <div class="job-header"><span class="job-company">{{COMPANY}}</span>, {{ROLE}}{{LOCATION_BLOCK}} ({{PERIOD}})</div>
+  <ul>
+    {{BULLETS}}
+  </ul>
+</div>
+<!--LOCATION_BLOCK-->, {{LOCATION}}<!--/LOCATION_BLOCK-->
+<!--/ENTRY-->
