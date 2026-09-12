@@ -354,14 +354,16 @@ function buildExperience(entries, partial) {
         ? e.bullets.filter(Boolean).map(b => `        <li>${escapeHtml(b)}</li>`).join('\n')
         : '';
       const location = e.location
-        ? `\n    <div class="job-location">${escapeHtml(e.location)}</div>`
+        ? `\n      <div class="job-location">${escapeHtml(e.location)}</div>`
         : '';
       return `<div class="job">
     <div class="job-header">
       <span class="job-company">${escapeHtml(e.company)}</span>
       <span class="job-period">${escapeHtml(e.dates || e.period || '')}</span>
     </div>
-    <div class="job-role">${escapeHtml(e.role)}</div>${location}
+    <div class="job-subheader">
+      <div class="job-role">${escapeHtml(e.role)}</div>${location}
+    </div>
     <ul>
 ${bullets}
     </ul>

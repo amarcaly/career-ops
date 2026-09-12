@@ -141,14 +141,18 @@ version: 1.0.0
 
   /* === WORK EXPERIENCE ===
      Two-row header. Row 1: company (left) / dates (right). Row 2: role (left) /
-     location (right). The builder emits .job-role and .job-location as separate
-     block divs, so the role is floated left and the location's shortened line
-     box is right-aligned beside it — this reproduces the original's tabular
-     look without needing a wrapper element. */
+     location (right). Both rows use the same flex "space-between" pattern —
+     NOT float. Floats pull content out of normal document flow and can desync
+     a PDF text-extractor's reconstructed reading order from the visual layout;
+     Workday's parser has been observed misattributing header/contact text into
+     a floated .job-role's row as a result. The builder still emits
+     .job-role and .job-location as separate block divs; they're wrapped in a
+     .job-subheader flex row instead of relying on float + clear. */
   .job { margin-bottom: 7px; }
   .job:last-child { margin-bottom: 0; }
 
-  .job-header {
+  .job-header,
+  .job-subheader {
     display: flex;
     justify-content: space-between;
     align-items: baseline;
@@ -166,7 +170,6 @@ version: 1.0.0
   }
 
   .job-role {
-    float: left;
     font-size: 10.5px;
     font-style: italic;
   }
@@ -175,10 +178,10 @@ version: 1.0.0
     font-size: 10.5px;
     font-style: italic;
     text-align: right;
+    white-space: nowrap;
   }
 
   .job ul {
-    clear: both;   /* required: ends the .job-role float before the bullets */
     margin-top: 2px;
     padding-left: 15px;
   }
@@ -284,7 +287,6 @@ version: 1.0.0
     text-align: right;
     font-family: 'Segoe UI', Tahoma, Arial, sans-serif;
   }
-  html[lang="ar"] .job-role { float: right; }
   html[lang="ar"] .job-location { text-align: left; }
   html[lang="ar"] .job ul { padding-right: 15px; padding-left: 0; }
   html[lang="ar"] .cv-photo { float: left; margin: 0 12px 6px 0; }
