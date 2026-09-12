@@ -16,10 +16,16 @@ import { existsSync, readFileSync } from 'fs';
 import { isAbsolute, join, dirname, basename } from 'path';
 import { fileURLToPath } from 'url';
 import { isMainModule } from './lib/is-main-module.mjs';
+import { getCareerOpsRoot } from './path-resolver.mjs';
 
 const ROOT = dirname(fileURLToPath(import.meta.url));
-const DEFAULT_SOURCES = ['cv.md', 'article-digest.md'];
-const DEFAULT_CONFIG = join(ROOT, 'config', 'cv-facts.json');
+const DATA_ROOT = getCareerOpsRoot();
+// Absolute so a caller running from a different cwd (or the data root being
+// split from the codebase root via CAREER_OPS_ROOT / .career-ops-data) still
+// finds the user's real cv.md instead of silently reading nothing and
+// flagging every real, sourced claim as invented.
+const DEFAULT_SOURCES = [join(DATA_ROOT, 'cv.md'), join(DATA_ROOT, 'article-digest.md')];
+const DEFAULT_CONFIG = join(DATA_ROOT, 'config', 'cv-facts.json');
 const TOOL_PROSE_WORDS = new Set([
   'a', 'an', 'and', 'at', 'built', 'by', 'containerized', 'deployment',
   'deployments', 'for', 'from', 'in', 'of', 'on', 'production', 'project',

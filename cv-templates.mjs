@@ -9,11 +9,19 @@ import { resolve, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import * as yaml from 'js-yaml';
 import { isMainModule } from './lib/is-main-module.mjs';
+import { getCareerOpsRoot } from './path-resolver.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const DEFAULT_TEMPLATES_DIR = resolve(__dirname, 'templates');
+// config/profile.yml is a User Layer file (DATA_CONTRACT.md) and can live
+// outside the codebase root via CAREER_OPS_ROOT/CAREER_OPS_DATA_DIR or the
+// .career-ops-data marker. Falling back to __dirname here silently resolved
+// to a nonexistent profile.yml in that setup and every no-name `resolve cv`
+// call quietly returned the base template instead of the user's configured
+// default. CAREER_OPS_PROFILE keeps highest precedence for callers
+// that want to point at one exact file regardless of the data root.
 const DEFAULT_PROFILE_PATH =
-  process.env.CAREER_OPS_PROFILE || resolve(__dirname, 'config', 'profile.yml');
+  process.env.CAREER_OPS_PROFILE || resolve(getCareerOpsRoot(), 'config', 'profile.yml');
 
 export const KINDS = {
   cv: {
