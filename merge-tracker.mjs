@@ -32,6 +32,7 @@ import { resolveTrackerPath, resolveWorkspaceRoot, resolvePdfIndexPath, trackerL
 // can adopt the same key later without the definitions drifting.
 import { normalizeUrl } from './url-key.mjs';
 
+const __dirname = dirname(fileURLToPath(import.meta.url));
 const CAREER_OPS = getCareerOpsRoot();
 // Support both layouts: data/applications.md (boilerplate) and applications.md
 // (original). CAREER_OPS_TRACKER overrides the path (used by tests and
@@ -1569,7 +1570,7 @@ trackerLock.release();
 // Sync PDF flags (idempotent; uses its own lock/transaction)
 if (!DRY_RUN) {
   try {
-    execFileSync('node', [join(CAREER_OPS, 'sync-pdf-flags.mjs')], { stdio: 'inherit' });
+    execFileSync('node', [join(__dirname, 'sync-pdf-flags.mjs')], { stdio: 'inherit' });
   } catch (e) {
     console.warn(`⚠️  Failed to sync PDF flags: ${e.message}`);
   }
