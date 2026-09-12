@@ -180,3 +180,9 @@ documents/*
 # Intake fingerprints — the recorded source filenames may themselves carry
 # PII (e.g. cv/jane-doe-master-cv.pdf). #1723
 data/intake-state.json
+
+# Per-machine data-root marker (AGENTS.md "Path Resolution Override &
+# Precedence"). Points at an absolute local path outside the repo and is
+# specific to one machine's username/filesystem layout — never portable
+# across machines, so never commit it.
+.career-ops-data
