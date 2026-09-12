@@ -108,22 +108,30 @@ version: 1.0.0
   .separator { margin: 0 4px; }
 
   /* === SECTIONS ===
-     Small caps + a rule directly beneath, matching \titlerule in the original. */
+     Uppercase + a rule directly beneath, matching \titlerule in the original. */
   .section { margin-bottom: 8px; }
 
   .section-title {
     font-size: 13px;
     font-weight: 400;
-    font-variant: small-caps;
-    text-transform: lowercase;
+    text-transform: uppercase;
     letter-spacing: 0.04em;
     border-bottom: 0.8px solid #000000;
     padding-bottom: 1px;
     margin-bottom: 4px;
   }
-  /* small-caps needs lowercase source text to render as small caps; the first
-     letter is restored to a full cap so headings read "Work Experience". */
-  .section-title::first-letter { text-transform: uppercase; }
+  /* Do not use font-variant: small-caps here (and do not bring back the prior
+     text-transform:lowercase + ::first-letter{text-transform:uppercase}
+     combo it replaced). Both looked identical on screen, but a browser's
+     headless PDF export synthesizes small-caps by drawing each case-run
+     (lowercase-turned-small-cap vs. genuine uppercase) as a separate glyph
+     run, and every run boundary lands as a stray space in the PDF's
+     extracted text layer — "P rofessional S ummary", "W ork E xperience".
+     Invisible to the eye, but fatal to ATS parsers, which pattern-match
+     exact section-header strings ("Work Experience") to segment a resume;
+     a broken match can make the whole resume look empty to the parser, not
+     just the heading. text-transform: uppercase renders as one glyph run
+     and extracts clean. */
 
   .summary-text { margin-top: 2px; }
 
